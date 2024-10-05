@@ -1,0 +1,57 @@
+  modules:
+  #this is test file 
+      # Module name, needs to be passed as parameter by Prometheus.
+    - name: "power_meter"
+      protocol: 'tcp/ip'
+      workarounds:
+        # Sleep a certain time after the TCP connection is established
+        #sleepAfterConnect: "1s"
+        # Waiting period interval before trying to fulfill a failed scrape request again
+        scrapeErrorWait: 1 # int representing milliseconds.
+        # Retries for failed scrape
+        scrapeErrorRetryCount: 1 # int
+      metrics:
+          # Name of the metric.
+        - name: "one_second_total_kw"
+          # Help text of the metric.
+          help: "pt_em_main_[1-9]s_tkw"
+          # Labels to be added to the time series.
+          labels:
+            unit: "kW"
+          address: 414336
+          dataType: int32
+          # Endianness allowed: big, little, mixed, yolo
+          endianness: yolo
+          metricType: gauge
+          #factor: 3.1415926535
+
+          # Name of the metric.
+        - name: "kWh_import"
+          # Help text of the metric.
+          help: "pt_em_bsa2_tekwhimp"
+          # Labels to be added to the time series.
+          labels:
+            unit: "kWh"
+            type: "Total Energies"
+          address: 414720
+          dataType: uint32
+          # Endianness allowed: big, little, mixed, yolo
+          endianness: yolo
+          metricType: gauge
+          #factor: 3.1415926535
+
+          # Name of the metric.
+        - name: "kWh_export"
+          # Help text of the metric.
+          help: "pt_em_bsa2_tekwhexp"
+          # Labels to be added to the time series.
+          labels:
+            unit: "kWh"
+            type: "Total Energies"
+          address: 414722
+          dataType: uint32
+          # Endianness allowed: big, little, mixed, yolo
+          endianness: yolo
+          metricType: gauge
+          #factor: 3.1415926535
+

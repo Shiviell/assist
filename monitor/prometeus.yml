@@ -1,0 +1,100 @@
+global:
+  scrape_interval: 60s
+  scrape_timeout: 10s
+
+scrape_configs:
+  - job_name: 'modbusexporter'
+    scrape_interval: 1m
+    static_configs:
+      - targets: ['modbus-exporter:9602']
+  - job_name: 'main_meter'
+    scrape_interval: 5s
+    scrape_timeout: 3s
+    metrics_path: /modbus
+    static_configs:
+      - targets:
+        # The port must be specified, the standard modbus port is 502
+        - 192.168.32.200:502  # Modbus device.
+    params:
+      # url parameters, module and sub_target are both required
+      module: ["power_meter"]
+      sub_target: ["1"] # Modbus unit identifier, e.g. when using Modbus TCP as a gateway.
+    relabel_configs:
+      # Hit the modbus exporter instead of the actual device
+      # Use the target address as the target parameter and instance label
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: modbus-exporter:9602  # The modbus exporter's real hostname:port.
+
+  - job_name: 'Battery_Meter'
+    scrape_interval: 5s
+    scrape_timeout: 3s
+    metrics_path: /modbus
+    static_configs:
+      - targets:
+        # The port must be specified, the standard modbus port is 502
+        - 192.168.32.201:502  # Modbus device.
+        - 192.168.32.202:502  # Modbus device.
+    params:
+      # url parameters, module and sub_target are both required
+      module: ["power_meter"]
+      sub_target: ["1"] # Modbus unit identifier, e.g. when using Modbus TCP as a gateway.
+    relabel_configs:
+      # Hit the modbus exporter instead of the actual device
+      # Use the target address as the target parameter and instance label
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: modbus-exporter:9602  # The modbus exporter's real hostname:port.
+
+  - job_name: 'solar_meter'
+    scrape_interval: 5s
+    scrape_timeout: 3s
+    metrics_path: /modbus
+    static_configs:
+      - targets:
+        # The port must be specified, the standard modbus port is 502
+        - 192.168.32.253:502  # Modbus device.
+    params:
+      # url parameters, module and sub_target are both required
+      module: ["power_meter"]
+      sub_target: ["4","42"] # Modbus unit identifier, e.g. when using Modbus TCP as a gateway.
+    relabel_configs:
+      # Hit the modbus exporter instead of the actual device
+      # Use the target address as the target parameter and instance label
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: modbus-exporter:9602  # The modbus exporter's real hostname:port.
+  
+
+  - job_name: 'prometheus'
+    scrape_interval: 1m
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100']
+  
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana-srv:3000']
+  - job_name: 'hass'
+    static_configs:
+      - targets: ['192.168.1.71:8123']
+    scrape_interval: 20s
+    metrics_path: /api/prometheus
+      # Long-Lived Access Token
+    bearer_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwNzBkYWIwYTc2YmE0M2ZiYjk0NTgzZDA1Mjg3ZjE5MSIsImlhdCI6MTcyNzQyOTAwNCwiZXhwIjoyMDQyNzg5MDA0fQ.yiGIV3DixL1iYuUHX_CqcZPO1vC2rEjxpvtEgQNO8OI"
+      #"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjMDY3YTBmMTczNDc0Y2M1YmM3OTA0MjRhZjBhNmEzMSIsImlhdCI6MTcyNzQyNzg4MywiZXhwIjoyMDQyNzg3ODgzfQ.ABtvLLbyUFXmV4oe85mOrNzN4OaMPK-50JVtPrlWC7g"
