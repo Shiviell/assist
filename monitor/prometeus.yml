@@ -1,6 +1,8 @@
 global:
   scrape_interval: 60s
   scrape_timeout: 10s
+rule_files:
+  - "*.rules.yml"
 
 scrape_configs:
   - job_name: 'modbusexporter'
@@ -90,11 +92,11 @@ scrape_configs:
   - job_name: 'grafana'
     static_configs:
       - targets: ['grafana-srv:3000']
-  - job_name: 'hass'
-    static_configs:
-      - targets: ['192.168.1.71:8123']
-    scrape_interval: 20s
-    metrics_path: /api/prometheus
+ # - job_name: 'hass'
+ #   static_configs:
+ #     - targets: ['192.168.1.71:8123']
+ #   scrape_interval: 20s
+ #   metrics_path: /api/prometheus
       # Long-Lived Access Token
-    bearer_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwNzBkYWIwYTc2YmE0M2ZiYjk0NTgzZDA1Mjg3ZjE5MSIsImlhdCI6MTcyNzQyOTAwNCwiZXhwIjoyMDQyNzg5MDA0fQ.yiGIV3DixL1iYuUHX_CqcZPO1vC2rEjxpvtEgQNO8OI"
-      #"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjMDY3YTBmMTczNDc0Y2M1YmM3OTA0MjRhZjBhNmEzMSIsImlhdCI6MTcyNzQyNzg4MywiZXhwIjoyMDQyNzg3ODgzfQ.ABtvLLbyUFXmV4oe85mOrNzN4OaMPK-50JVtPrlWC7g"
+#    bearer_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIwNzBkYWIwYTc2YmE0M2ZiYjk0NTgzZDA1Mjg3ZjE5MSIsImlhdCI6MTcyNzQyOTAwNCwiZXhwIjoyMDQyNzg5MDA0fQ.yiGIV3DixL1iYuUHX_CqcZPO1vC2rEjxpvtEgQNO8OI"
+#      #"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjMDY3YTBmMTczNDc0Y2M1YmM3OTA0MjRhZjBhNmEzMSIsImlhdCI6MTcyNzQyNzg4MywiZXhwIjoyMDQyNzg3ODgzfQ.ABtvLLbyUFXmV4oe85mOrNzN4OaMPK-50JVtPrlWC7g"
