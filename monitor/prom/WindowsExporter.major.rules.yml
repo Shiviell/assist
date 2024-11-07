@@ -32,7 +32,7 @@ groups:
         description: "Memory usage is more than 90%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
     - alert: WindowsServerDiskSpaceUsage
-      expr: '90 < (100.0 - 100 * ((windows_logical_disk_free_bytes / 1024 / 1024 ) / (windows_logical_disk_size_bytes / 1024 / 1024))) < 90'
+      expr: '85 < (100.0 - 100 * ((windows_logical_disk_free_bytes / 1024 / 1024 ) / (windows_logical_disk_size_bytes / 1024 / 1024))) < 90'
       for: 2m
       labels:
         severity: major
