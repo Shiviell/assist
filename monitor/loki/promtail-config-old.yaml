@@ -1,0 +1,28 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+- job_name: 'alertmanager-1'
+  loki_push_api:
+    server:
+      http_listen_port: 3500
+  static_configs:
+    - targets: ['localhost']
+      labels:
+        alertmanager_instance: 'alertmanager-1'  # Custom label for the first Alertmanager
+        job: 'alertmanager'
+
+- job_name: system
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: varlogs
+      __path__: /var/log/*log

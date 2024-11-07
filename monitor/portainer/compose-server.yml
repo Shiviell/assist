@@ -1,0 +1,16 @@
+version: "3"
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    ports:
+      - 8000:8000
+      - 9443:9443
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+        #command: 
+        #- '--admin-password $6$grUYruFQPCJd1uOm$JzoO7xSTMGGXPY1a6a/Gka/CEst.qMhJkfETNMLNcOdFsSYG0naOwBKyR7WWa64Q3bcMWzDrvzW2q5iJSQ2Dv.'
+    restart: unless-stopped
+volumes:
+  portainer_data:

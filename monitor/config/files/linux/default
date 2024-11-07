@@ -1,0 +1,10 @@
+web:
+  listen-address: ":9100"
+  telemetry-path: "/metrics"
+
+collectors:
+  - cpu
+  - diskstats
+  - filesystem
+  - meminfo
+  - netdev

@@ -1,0 +1,49 @@
+global:
+  scrape_interval: 60s
+
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets: [ 'alertmanager:9093' ]
+rule_files:
+  - "*.rules.yml"
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 1m
+    static_configs:
+      - targets: ['localhost:9090']
+    relabel_configs:
+      - target_label: site
+        replacement: mrxprt
+
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node-exporter:9100' ,'node:9100']
+    relabel_configs:
+      - target_label: site
+        replacement: mrxprt
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+    relabel_configs:
+      - target_label: site
+        replacement: mrxprt
+  # only on main prom server
+  - job_name: 'federate'
+    scrape_interval: 60s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{alertname!=""}'
+    static_configs:
+      - targets:
+        - '100.75.224.123:9090'
+        - '100.121.197.132:9090'
+        #- 'source-prometheus-3:9090'
+    relabel_configs:
+      - target_label: site
+        replacement: mrxprt
